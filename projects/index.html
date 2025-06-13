@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos | Carlos Torres</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- GSAP (GreenSock Animation Platform) & ScrollTrigger Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
+
+    <style>
+        :root {
+            --dark-bg: #0d1117;
+            --medium-bg: #161b22;
+            --light-bg: #21262d;
+            --border-color: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #c9d1d9;
+            --text-tertiary: #8b949e;
+            --accent-blue: #58a6ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-secondary);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .project-card {
+            background-color: rgba(22, 27, 34, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out, opacity 0.3s ease;
+            border-radius: 0.75rem;
+            cursor: pointer;
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px 0 rgba(88, 166, 255, 0.3);
+            border-color: var(--accent-blue);
+        }
+
+        .navbar {
+            background-color: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(10px);
+            transition: top 0.3s;
+        }
+
+        /* Estilos para los selectores (combobox) */
+        .custom-select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .custom-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        .custom-select:hover {
+            border-color: var(--accent-blue);
+        }
+        .custom-select-wrapper::after {
+            content: "▼";
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* Estilos del Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(13, 17, 23, 0.9);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-content {
+            background-color: var(--light-bg); border-radius: 0.5rem;
+            max-width: 900px; width: 95%; max-height: 90vh;
+            overflow-y: auto; position: relative; padding: 2rem;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0) scale(1); }
+        .modal-close-button {
+            position: absolute; top: 1rem; right: 1rem;
+            color: var(--text-secondary); cursor: pointer;
+        }
+        .modal-close-button:hover { color: var(--accent-blue); }
+        
+        /* Estilos del Carrousel del Modal */
+        .carousel-container { position: relative; }
+        .carousel-slide { display: none; }
+        .carousel-slide.active { display: block; }
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background-color: rgba(13, 17, 23, 0.6); color: var(--accent-blue);
+            border: none; padding: 0.5rem; border-radius: 50%;
+            cursor: pointer; z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+        .carousel-arrow:hover { background-color: rgba(13, 17, 23, 0.9); }
+        .carousel-arrow.prev { left: 1rem; }
+        .carousel-arrow.next { right: 1rem; }
+        .carousel-dots-container {
+            position: absolute; bottom: 1rem; left: 50%;
+            transform: translateX(-50%); display: flex; gap: 0.5rem;
+        }
+        .dot {
+            width: 0.75rem; height: 0.75rem; border-radius: 50%;
+            background-color: var(--text-tertiary);
+            transition: background-color 0.3s ease; cursor: pointer;
+        }
+        .dot.active { background-color: var(--accent-blue); }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Fondo Animado -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="navbar py-4 px-6 md:px-10 shadow-lg sticky top-0 left-0 right-0 z-50">
+        <div class="container mx-auto flex justify-between items-center max-w-7xl">
+            <a href="hola.html" class="text-2xl font-bold font-mono" style="color: var(--accent-blue);">CT</a>
+             <a href="hola.html" class="font-mono text-sm border border-[var(--accent-blue)] text-[var(--accent-blue)] py-2 px-4 rounded-md hover:bg-[var(--accent-blue)]/10 transition-colors">
+                Volver al Inicio
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Contenedor Principal -->
+    <div class="content-wrapper relative z-10">
+        <div class="container mx-auto max-w-6xl px-6 py-24">
+
+            <header class="text-center my-16">
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-2 text-text-primary reveal-animation">
+                    Archivo de Proyectos
+                </h1>
+                <p class="text-lg text-text-secondary max-w-2xl mx-auto mt-4 leading-relaxed reveal-animation">
+                    Una colección de las cosas que he construido. Filtra por tecnología o tipo de aplicación.
+                </p>
+            </header>
+
+            <main>
+                <!-- Filtros con Selects -->
+                <section id="filters" class="mb-12 flex flex-col md:flex-row justify-center items-center gap-6 reveal-animation">
+                    <div class="flex items-center gap-3">
+                        <label for="tech-filter" class="font-mono text-text-secondary shrink-0">Tecnología:</label>
+                        <div class="custom-select-wrapper">
+                            <select id="tech-filter" class="custom-select">
+                                <option value="*">Todas</option>
+                                <option value="nodejs">Node.js</option>
+                                <option value="astro">Astro</option>
+                                <option value="java">Java</option>
+                                <option value="python">Python</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label for="type-filter" class="font-mono text-text-secondary shrink-0">Tipo:</label>
+                         <div class="custom-select-wrapper">
+                            <select id="type-filter" class="custom-select">
+                                <option value="*">Todos</option>
+                                <option value="api">API Rest</option>
+                                <option value="webapp">Web App</option>
+                                <option value="microservicio">Microservicio</option>
+                                <option value="tool">Herramienta</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Grid de Proyectos -->
+                <section id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="project-card p-6 flex flex-col" data-project-id="cine-api" data-tech="nodejs mongodb" data-type="api">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-4"><i data-feather="film" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a><a href="#" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="external-link" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Cine API</h3><p class="text-sm text-text-secondary leading-relaxed">API REST para consulta de información de películas. Enfocada en rendimiento y escalabilidad.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Node.js</span><span>Express</span><span>MongoDB</span></div>
+                    </div>
+
+                    <div class="project-card p-6 flex flex-col" data-project-id="dire-docs" data-tech="astro" data-type="webapp">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-4"><i data-feather="book-open" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Dire Docs</h3><p class="text-sm text-text-secondary leading-relaxed">Sistema de documentación simple y rápido, generado estáticamente con Astro.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Astro</span><span>Tailwind CSS</span><span>Markdown</span></div>
+                    </div>
+
+                    <div class="project-card p-6 flex flex-col" data-project-id="auth-service" data-tech="java spring" data-type="microservicio">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-4"><i data-feather="shield" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Servicio de Autenticación</h3><p class="text-sm text-text-secondary leading-relaxed">Microservicio para gestionar usuarios y JWTs, construido con Spring Boot y Spring Security.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Java</span><span>Spring Boot</span><span>PostgreSQL</span></div>
+                    </div>
+
+                    <div class="project-card p-6 flex flex-col" data-project-id="scraper-api" data-tech="python" data-type="api tool">
+                        <div class="flex-grow">
+                             <div class="flex justify-between items-start mb-4"><i data-feather="search" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Web Scraper con FastAPI</h3><p class="text-sm text-text-secondary leading-relaxed">API para extraer datos de sitios web de forma asíncrona utilizando FastAPI y Beautiful Soup.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Python</span><span>FastAPI</span><span>Beautiful Soup</span></div>
+                    </div>
+
+                     <div class="project-card p-6 flex flex-col" data-project-id="chat-app" data-tech="nodejs" data-type="webapp">
+                        <div class="flex-grow">
+                             <div class="flex justify-between items-start mb-4"><i data-feather="message-square" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a><a href="#" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="external-link" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Chat en Tiempo Real</h3><p class="text-sm text-text-secondary leading-relaxed">Aplicación de chat que utiliza WebSockets para comunicación bidireccional instantánea.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Node.js</span><span>Socket.io</span><span>React</span></div>
+                    </div>
+
+                    <div class="project-card p-6 flex flex-col" data-project-id="csv-processor" data-tech="java" data-type="tool">
+                        <div class="flex-grow">
+                             <div class="flex justify-between items-start mb-4"><i data-feather="cpu" class="w-10 h-10 text-[var(--accent-blue)]"></i><div class="flex gap-3"><a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-5 h-5"></i></a></div></div>
+                            <h3 class="text-xl font-bold mb-2">Procesador de CSV</h3><p class="text-sm text-text-secondary leading-relaxed">Herramienta de consola para procesar y transformar grandes volúmenes de datos desde archivos CSV.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4 font-mono text-xs text-text-tertiary"><span>Java</span><span>Maven</span></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Modal de Proyectos -->
+    <div id="project-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-button" class="modal-close-button" aria-label="Cerrar modal"><i data-feather="x" class="w-8 h-8"></i></button>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-3">
+                    <div id="modal-carousel" class="carousel-container bg-dark-bg rounded-md overflow-hidden">
+                        <div id="carousel-slides-container"></div>
+                        <button id="carousel-prev" class="carousel-arrow prev"><i data-feather="chevron-left"></i></button>
+                        <button id="carousel-next" class="carousel-arrow next"><i data-feather="chevron-right"></i></button>
+                        <div id="carousel-dots" class="carousel-dots-container"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 flex flex-col">
+                    <div class="flex-grow">
+                        <h2 id="modal-project-title" class="text-3xl font-bold mb-2"></h2>
+                        <div id="modal-project-technologies" class="flex flex-wrap gap-2 mb-4"></div>
+                        <p id="modal-project-body" class="text-text-secondary text-sm leading-relaxed mb-6"></p>
+                    </div>
+                    <div id="modal-project-links" class="flex justify-start gap-4 mt-auto"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+
+            // --- Canvas de fondo animado ---
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const numParticles = window.innerWidth < 768 ? 40 : 80;
+            const connectionDistance = 120;
+            class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*2+1;this.speedX=Math.random()*0.8-0.4;this.speedY=Math.random()*0.8-0.4;this.color='rgba(88, 166, 255, 0.8)'}update(){if(this.x>canvas.width||this.x<0){this.speedX*=-1}if(this.y>canvas.height||this.y<0){this.speedY*=-1}this.x+=this.speedX;this.y+=this.speedY}draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}}
+            function initParticles(){particles=[];for(let i=0;i<numParticles;i++){particles.push(new Particle())}}
+            function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles()}
+            function animateBackground(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let p of particles){p.update();p.draw()}drawConnections();requestAnimationFrame(animateBackground)}
+            function drawConnections(){let e='rgba(88, 166, 255, 0.15)';for(let t=0;t<particles.length;t++){for(let o=t;o<particles.length;o++){let s=Math.sqrt(Math.pow(particles[t].x-particles[o].x,2)+Math.pow(particles[t].y-particles[o].y,2));if(s<connectionDistance){ctx.strokeStyle=e;ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(particles[t].x,particles[t].y);ctx.lineTo(particles[o].x,particles[o].y);ctx.stroke()}}}}
+            window.addEventListener('resize',resizeCanvas);resizeCanvas();animateBackground();
+
+            // --- Lógica de Filtros con Select ---
+            const techFilter = document.getElementById('tech-filter');
+            const typeFilter = document.getElementById('type-filter');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            function applyFilters() {
+                const activeTechFilter = techFilter.value;
+                const activeTypeFilter = typeFilter.value;
+                projectCards.forEach(card=>{const techData=card.dataset.tech||'',typeData=card.dataset.type||'';const techMatch=activeTechFilter==='*'||techData.split(' ').includes(activeTechFilter);const typeMatch=activeTypeFilter==='*'||typeData.split(' ').includes(activeTypeFilter);if(techMatch&&typeMatch){card.style.display='flex';setTimeout(()=>{card.style.opacity='1';card.style.transform='translateY(0)'},50)}else{card.style.opacity='0';card.style.transform='translateY(20px)';setTimeout(()=>{card.style.display='none'},300)}});
+            }
+            techFilter.addEventListener('change', applyFilters);
+            typeFilter.addEventListener('change', applyFilters);
+
+            // --- Datos de Proyectos para el Modal ---
+            const projectsData = {
+                'cine-api':{title:'Cine API',longDescription:'API RESTful robusta y escalable construida con Node.js y Express. Permite a los usuarios buscar, filtrar y obtener detalles sobre películas. Implementa autenticación JWT y utiliza un sistema de caché para mejorar el rendimiento.',technologies:['Node.js','Express.js','MongoDB','JWT','Docker'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Cine+API+Endpoint'},{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Estructura+del+Proyecto'}],links:{github:'https://github.com/cawtoz',demo:'#'}},
+                'dire-docs':{title:'Dire Docs',longDescription:'Plataforma de documentación ligera y fácil de usar, inspirada en la navegación de sistemas de archivos. Construida con Astro y Tailwind CSS, ofrece una experiencia de usuario rápida gracias a la generación de sitios estáticos.',technologies:['Astro','Tailwind CSS','Markdown','SSG'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Dire+Docs+Home'},{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Navegación+de+Archivos'}],links:{github:'https://github.com/cawtoz'}},
+                'auth-service':{title:'Servicio de Autenticación',longDescription:'Microservicio backend dedicado a la gestión de la autenticación y autorización de usuarios. Construido con Java y Spring Boot, utiliza Spring Security para proteger los endpoints y emite JSON Web Tokens (JWT) para sesiones seguras.',technologies:['Java','Spring Boot','Spring Security','PostgreSQL','Docker'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Flujo+de+Autenticación'},{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Modelo+de+Datos'}],links:{github:'https://github.com/cawtoz'}},
+                'scraper-api':{title:'Web Scraper con FastAPI',longDescription:'Una API de alto rendimiento creada con Python y FastAPI para realizar web scraping. Utiliza Beautiful Soup para parsear el HTML y es capaz de manejar múltiples peticiones de forma asíncrona para una rápida extracción de datos.',technologies:['Python','FastAPI','Beautiful Soup','AsyncIO'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=API+Endpoint+Scraping'}],links:{github:'https://github.com/cawtoz'}},
+                'chat-app':{title:'Chat en Tiempo Real',longDescription:'Aplicación de chat full-stack que permite la comunicación instantánea entre usuarios. El frontend está construido con React y el backend con Node.js y Socket.IO para gestionar las conexiones WebSocket.',technologies:['React','Node.js','Socket.IO','Express.js'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Interfaz+del+Chat'},{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Conexión+WebSocket'}],links:{github:'https://github.com/cawtoz',demo:'#'}},
+                'csv-processor':{title:'Procesador de CSV',longDescription:'Herramienta de línea de comandos (CLI) desarrollada en Java para el procesamiento eficiente de grandes archivos CSV. Permite aplicar transformaciones, filtros y validaciones de datos de forma robusta.',technologies:['Java','Maven','CLI'],media:[{type:'image',src:'https://placehold.co/800x500/0d1117/58a6ff?text=Ejecución+en+Consola'}],links:{github:'https://github.com/cawtoz'}}
+            };
+            
+            // --- Lógica del Modal y Carrousel ---
+            const modalOverlay = document.getElementById('project-modal-overlay');
+            let currentSlide = 0;
+            let projectMedia = [];
+
+            function showSlide(index) {
+                const slides = document.querySelectorAll('#carousel-slides-container .carousel-slide');
+                const dots = document.querySelectorAll('#carousel-dots .dot');
+                if (!slides.length || !dots.length) return;
+                currentSlide = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => slide.classList.toggle('active', i === currentSlide));
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+            }
+
+            function openModal(projectId) {
+                const project = projectsData[projectId];
+                if (!project) return;
+                projectMedia = project.media;
+                document.getElementById('modal-project-title').textContent = project.title;
+                document.getElementById('modal-project-body').innerHTML = project.longDescription;
+                const techContainer = document.getElementById('modal-project-technologies');
+                techContainer.innerHTML = project.technologies.map(tech => `<span class="bg-[var(--medium-bg)] text-[var(--accent-blue)] text-xs font-mono py-1 px-2 rounded-full">${tech}</span>`).join('');
+                const linksContainer = document.getElementById('modal-project-links');
+                linksContainer.innerHTML = '';
+                if(project.links.github) linksContainer.innerHTML += `<a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-transform hover:scale-105"><i data-feather="github" class="w-5 h-5"></i>Código</a>`;
+                if(project.links.demo) linksContainer.innerHTML += `<a href="${project.links.demo}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-transform hover:scale-105"><i data-feather="external-link" class="w-5 h-5"></i>Demo</a>`;
+                document.getElementById('carousel-slides-container').innerHTML = projectMedia.map(m => `<div class="carousel-slide aspect-video"><img src="${m.src}" class="w-full h-full object-cover"></div>`).join('');
+                document.getElementById('carousel-dots').innerHTML = projectMedia.map((_, i) => `<button class="dot" data-slide="${i}"></button>`).join('');
+                feather.replace();
+                showSlide(0);
+                modalOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            projectCards.forEach(card => card.addEventListener('click', () => openModal(card.dataset.projectId)));
+            document.getElementById('modal-close-button').addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+            
+            document.getElementById('carousel-next').addEventListener('click', () => showSlide(currentSlide + 1));
+            document.getElementById('carousel-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+            document.getElementById('carousel-dots').addEventListener('click', e => { if(e.target.matches('.dot')) showSlide(parseInt(e.target.dataset.slide)); });
+
+            // --- GSAP y ScrollTrigger ---
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.from(".reveal-animation", { duration: 0.8, y: 50, opacity: 0, stagger: 0.2, ease: "power3.out", delay: 0.2 });
+            projectCards.forEach(el => {gsap.from(el, {scrollTrigger: { trigger: el, start: "top 95%", toggleActions: "play none none none" }, y: 40, opacity: 0, duration: 0.6, ease: "power3.out"});});
+        });
+    </script>
+</body>
+</html>

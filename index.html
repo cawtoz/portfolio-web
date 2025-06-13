@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlos Torres | Desarrollador Backend</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- GSAP (GreenSock Animation Platform) & ScrollTrigger Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
+
+    <style>
+        :root {
+            /* Paleta de colores (Azul/Negro) */
+            --dark-bg: #0d1117;
+            --medium-bg: #161b22;
+            --light-bg: #21262d;
+            --border-color: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #c9d1d9;
+            --text-tertiary: #8b949e;
+            --accent-blue: #58a6ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-secondary);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Fondo animado */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Estilo de tarjeta */
+        .card {
+            background-color: rgba(22, 27, 34, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out;
+            border-radius: 0.75rem;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px -15px rgba(13, 17, 23, 0.7);
+            border-color: var(--accent-blue);
+        }
+        /* [NUEVO] Cursor en tarjetas de proyecto */
+        .featured-project-card {
+            cursor: pointer;
+        }
+
+        /* Titulo de seccion */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            font-size: 1.75rem;
+            white-space: nowrap;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(10px);
+            transition: top 0.3s;
+        }
+        .navbar-link {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        .navbar-link:hover, .navbar-link.active {
+            color: var(--accent-blue);
+        }
+        
+        /* Efecto de escritura */
+        .typewriter-cursor::after {
+            content: '_';
+            animation: blink 0.7s infinite;
+            color: var(--accent-blue);
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            transform: translateX(-50%);
+            top: 15px;
+            bottom: 15px;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 3rem;
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            transform: translateX(-50%);
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent-blue);
+            border: 3px solid var(--dark-bg);
+            z-index: 1;
+        }
+        
+        /* [MODIFICADO] Tech Stack Carousel Animado */
+        .scroller-container {
+            -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+        }
+        .tech-scroller {
+            display: flex;
+            gap: 3rem;
+        }
+        .tech-scroller-wrapper {
+            display: flex;
+            flex-shrink: 0;
+            gap: 3rem;
+            animation: scroll 40s linear infinite;
+        }
+        .tech-icon-container {
+            flex-shrink: 0;
+            width: 100px;
+            text-align: center;
+        }
+        .tech-icon-container svg {
+            width: 4rem;
+            height: 4rem;
+            fill: currentColor;
+            color: var(--text-tertiary);
+            transition: color 0.3s ease, transform 0.3s ease;
+            margin: 0 auto;
+        }
+        .tech-icon-container:hover svg {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        
+        /* Estilos del Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 17, 23, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: var(--light-bg);
+            border-radius: 0.5rem;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0) scale(1);
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .modal-close-button:hover {
+             color: var(--accent-blue);
+        }
+        
+        /* [MODIFICADO] Estilos del Carrousel del Modal */
+        .carousel-container { position: relative; }
+        .carousel-slide { display: none; }
+        .carousel-slide.active { display: block; }
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(13, 17, 23, 0.6);
+            color: var(--accent-blue);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+        .carousel-arrow:hover {
+            background-color: rgba(13, 17, 23, 0.9);
+        }
+        .carousel-arrow.prev { left: 1rem; }
+        .carousel-arrow.next { right: 1rem; }
+        .carousel-dots-container {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+        .dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: var(--text-tertiary);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .dot.active {
+            background-color: var(--accent-blue);
+        }
+
+        /* Boton de Scroll al Top */
+        #scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--light-bg);
+            color: var(--accent-blue);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            z-index: 1000;
+        }
+        #scroll-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Menu mobil */
+        @media screen and (max-width: 768px) {
+            .featured-project-card .text-right, .featured-project-card .text-left { text-align: left; }
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 0; right: 0;
+                height: 100vh;
+                width: min(75vw, 400px);
+                background-color: var(--light-bg);
+                padding: 5rem 2rem;
+                align-items: center;
+                gap: 2rem;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-out;
+            }
+            .navbar-menu.open {
+                transform: translateX(0);
+                display: flex;
+            }
+            .navbar-toggle { z-index: 101; }
+        }
+        
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Fondo Animado -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="navbar py-4 px-6 md:px-10 shadow-lg fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto flex justify-between items-center max-w-7xl">
+            <a href="#home" class="text-2xl font-bold font-mono" style="color: var(--accent-blue);">CT</a>
+            <button id="navbar-toggle" class="navbar-toggle md:hidden text-white focus:outline-none z-50">
+                <i data-feather="menu" class="w-7 h-7"></i>
+            </button>
+            <div id="navbar-menu" class="hidden md:flex md:items-center md:space-x-8">
+                <a href="#trayectoria" class="navbar-link font-mono">1. Trayectoria</a>
+                <a href="#proyectos" class="navbar-link font-mono">2. Proyectos</a>
+                <a href="#tech-stack" class="navbar-link font-mono">3. Tecnologías</a>
+                <a href="#conceptos" class="navbar-link font-mono">4. Conceptos</a>
+                <a href="#contacto" class="navbar-link font-mono">5. Contacto</a>
+                <a href="ruta/a/tu/cv.pdf" download class="font-mono text-sm border border-[var(--accent-blue)] text-[var(--accent-blue)] py-2 px-4 rounded-md hover:bg-[var(--accent-blue)]/10 transition-colors">
+                    Descargar CV
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Contenedor Principal -->
+    <div class="content-wrapper relative z-10">
+        <div class="container mx-auto max-w-4xl px-6">
+
+            <!-- Sección Hero -->
+            <header id="home" class="min-h-screen flex flex-col justify-center py-20">
+                <div class="max-w-4xl">
+                    <p class="font-mono text-lg mb-4 reveal-animation" style="color: var(--accent-blue);">Hola, mi nombre es</p>
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-2 text-text-primary reveal-animation">
+                        Carlos Torres.
+                    </h1>
+                    <h2 id="typewriter" class="text-3xl md:text-5xl font-extrabold text-text-tertiary mb-6 typewriter-cursor reveal-animation">
+                    </h2>
+                    <p class="text-lg text-text-secondary max-w-2xl mb-10 leading-relaxed reveal-animation">
+                        Apasionado por construir la infraestructura digital del futuro, creando soluciones backend robustas, eficientes y escalables.
+                    </p>
+                    <div class="reveal-animation">
+                        <!-- Botón Hero mejorado -->
+                        <a href="#proyectos" class="bg-[var(--accent-blue)] text-[var(--dark-bg)] font-bold py-4 px-8 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50 shadow-lg">
+                            Ver mis Proyectos
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <!-- Sección Trayectoria -->
+                <section id="trayectoria" class="py-24">
+                    <h2 class="section-title mb-16 reveal-section-title">
+                        <span class="font-mono text-[var(--accent-blue)] text-2xl mr-2">01.</span> Trayectoria Profesional
+                    </h2>
+                    <div class="timeline-container">
+                        <div class="timeline-item reveal-timeline">
+                            <div class="card p-6">
+                                <p class="font-mono mb-2" style="color: var(--accent-blue);">2024 - Presente</p>
+                                <h3 class="text-xl font-bold mb-2">Desarrollador Full Stack - Fundación Cineteca Pública</h3>
+                                <p class="text-sm text-text-secondary mb-4">Lidero el desarrollo de una plataforma para la catalogación y difusión del patrimonio fílmico, implementando una arquitectura moderna y escalable.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Node.js</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">PostgreSQL</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Astro</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item reveal-timeline">
+                            <div class="card p-6">
+                                <p class="font-mono mb-2" style="color: var(--accent-blue);">2021 - 2025</p>
+                                <h3 class="text-xl font-bold mb-2">Formación Académica - Unidades Tecnológicas de Santander (UTS)</h3>
+                                <p class="text-sm text-text-secondary">Tecnología en Desarrollo de Sistemas de Información, adquiriendo una base sólida en algoritmos, estructuras de datos y principios de ingeniería de software.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección Proyectos Destacados -->
+                <section id="proyectos" class="py-24">
+                    <h2 class="section-title mb-12 reveal-section-title">
+                        <span class="font-mono text-[var(--accent-blue)] text-2xl mr-2">02.</span> Proyectos Destacados
+                    </h2>
+                    <div class="space-y-24">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center reveal-project featured-project-card" data-project-id="cine-api">
+                            <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden"><img src="https://placehold.co/600x360/161b22/58a6ff?text=Cine+API" alt="Vista previa del proyecto Cine API" class="w-full h-full object-cover project-image"></div>
+                            <div class="md:col-span-5 text-right">
+                                <p class="font-mono text-sm" style="color: var(--accent-blue);">Proyecto Destacado</p>
+                                <h3 class="text-2xl font-bold mb-4">Cine API</h3>
+                                <div class="card p-6 text-sm text-text-secondary text-left shadow-lg">API REST para consulta de información de películas. Enfocada en rendimiento y escalabilidad.</div>
+                                <div class="flex justify-end flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-text-tertiary"><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center reveal-project featured-project-card" data-project-id="dire-docs">
+                             <div class="md:col-span-5 text-left md:order-1">
+                                <p class="font-mono text-sm" style="color: var(--accent-blue);">Proyecto Destacado</p>
+                                <h3 class="text-2xl font-bold mb-4">Dire Docs</h3>
+                                <div class="card p-6 text-sm text-text-secondary shadow-lg">Sistema de documentación simple y rápido, generado estáticamente con Astro.</div>
+                                <div class="flex justify-start flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-text-tertiary"><span>Astro</span><span>Tailwind CSS</span><span>Markdown</span></div>
+                            </div>
+                            <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden md:order-2"><img src="https://placehold.co/600x360/161b22/58a6ff?text=Dire+Docs" alt="Vista previa del proyecto Dire Docs" class="w-full h-full object-cover project-image"></div>
+                        </div>
+                    </div>
+                    <!-- Botón Ver todos los proyectos -->
+                    <div class="text-center mt-20 reveal-project">
+                         <a href="projects/" class="font-mono text-lg border border-[var(--accent-blue)] text-[var(--accent-blue)] py-3 px-6 rounded-md hover:bg-[var(--accent-blue)]/10 transition-colors">
+                           Ver Archivo de Proyectos
+                        </a>
+                    </div>
+                </section>
+
+                <!-- [MODIFICADO] Sección Tech Stack Animada -->
+                <section id="tech-stack" class="py-24">
+                    <h2 class="section-title mb-16 reveal-section-title">
+                        <span class="font-mono text-[var(--accent-blue)] text-2xl mr-2">03.</span> Mi Stack Tecnológico
+                    </h2>
+                    <div class="scroller-container">
+                        <div class="tech-scroller">
+                            <div class="tech-scroller-wrapper">
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Java</title><path d="M11.75.25a.75.75 0 00-.75.75v3.23c-1.3.43-2.34 1.2-3.1 2.13-.77.93-1.28 2.02-1.55 3.2-.27 1.18-.3 2.37-.1 3.52.2 1.15.63 2.25 1.28 3.26.65 1.01 1.5 1.88 2.52 2.56s2.17 1.16 3.4 1.43v2.92a.75.75 0 001.5 0v-2.92c1.23-.27 2.38-.75 3.4-1.43s1.87-1.55 2.52-2.56a6.04 6.04 0 001.28-3.26c.2-1.15.17-2.34-.1-3.52a6.393 6.393 0 00-1.55-3.2c-.76-.93-1.8-1.7-3.1-2.13V1a.75.75 0 00-.75-.75h-1.5zm-1.8 14.54a4.464 4.464 0 01-.96-2.45c-.1-1.6.3-2.9.96-3.86.65-.95 1.6-1.53 2.76-1.7v8.06c-1.15-.17-2.1-.75-2.76-1.7v-2.28l.01 2.28zM14.05 3.9v8.07c1.16.17 2.1.75 2.76 1.7.66.95.96 2.25.96 3.86a4.52 4.52 0 01-1.04 2.45c.9-.41 1.7-.99 2.35-1.7.65-1.01 1.03-2.16 1.15-3.39.12-1.23.04-2.43-.3-3.59a4.872 4.872 0 00-1.2-2.48c-.6-.7-1.4-1.28-2.35-1.7l-.33.05zm.33 9.87v-2.28l.01 2.28z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Java</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Python</title><path d="M23.33.34a.33.33 0 00-.33.33v3.62c-1.5.5-2.69 1.38-3.56 2.46-.86 1.08-1.4 2.34-1.61 3.71-.22 1.37-.2 2.75.05 4.08.25 1.33.74 2.61 1.49 3.78.75 1.17 1.73 2.18 2.92 2.96 1.19.78 2.52 1.34 3.94 1.65v3.38a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33V.67a.33.33 0 00-.33-.33h-1.34zM12.33.34a.33.33 0 00-.33.33v6.33H8.33a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.67v1.33a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33V.67a.33.33 0 00-.33-.33h-1.34zm-2.09 14.5a5.174 5.174 0 01-1.11-2.84c-.12-1.85.35-3.36 1.11-4.47.76-1.1 1.85-1.77 3.2-2v9.34c-1.34-.2-2.43-.87-3.2-1.9v-2.64l.01 2.64zM.67 23.66a.33.33 0 00.33-.33v-3.62c1.5-.5 2.69-1.38 3.56-2.46.86-1.08 1.4-2.34 1.61-3.71.22-1.37.2-2.75-.05-4.08-.25-1.33-.74-2.61-1.49-3.78C5.43 4.43 4.45 3.42 3.26 2.64c-1.19-.78-2.52-1.34-3.94-1.65V.67A.33.33 0 00-.33.34H-1.67a.33.33 0 00-.33.33v22.66c0 .18.15.33.33.33H.67zm11.66 0a.33.33 0 00.33-.33V17a.33.33 0 00-.33-.33H8.67a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.33v1.33a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33v-1.33h-1v-1.34h1v1.34a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33v-1.33h.34a.33.33 0 00.33-.33v-1.34a.33.33 0 00-.33-.33h-.34v-1.33a.33.33 0 00-.33-.33h-1.34a.33.33 0 00-.33.33v1.33H8.67a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.33v3.66a.33.33 0 00.33.33h1.34zM-9.24 9.46c-1.35.2-2.44.87-3.2 2-.76 1.1-.98 2.62-1.1 4.47a5.21 5.21 0 011.1 2.84c1.18.47 2.2.82 3.2 1.05V9.46z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Python</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>JavaScript</title><path d="M0 0h24v24H0V0zm22.034 18.262c.337-1.13.434-2.333.284-3.518-.15-1.186-.485-2.34-1.006-3.41-.52-1.07-1.22-2.04-2.09-2.88-.87-.84-1.905-1.52-3.09-2.01-1.185-.49-2.508-.78-3.84-.84-.537-.024-1.08-.01-1.62.053-.54.062-1.08.17-1.62.322-.54.153-1.05.35-1.53.585-.48.237-.93.51-1.35.81-.42.3-.81.63-1.17.99-.36.36-.69.75-.99 1.17-.3.42-.57.87-.81 1.35-.24.48-.43.99-.586 1.53-.153.54-.26 1.08-.323 1.62-.062.54-.076 1.083-.052 1.62.023 1.332.315 2.655.84 3.84.49 1.185 1.19 2.22 2.01 3.09.84.87 1.82 1.57 2.88 2.09 1.07.52 2.224.856 3.41 1.006 1.186.15 2.388.054 3.518-.284 1.13-.336 2.19-.88 3.12-1.62 1.02-.81 1.86-1.84 2.49-3.03.63-1.19.99-2.53 1.05-3.87.06-1.34-.15-2.68-.63-3.93zm-1.89 5.34c-.51.87-1.17 1.62-1.98 2.22-.81.6-1.74 1.05-2.76 1.32-1.02.27-2.07.36-3.12.27-1.05-.09-2.07-.39-3.03-.84-.96-.45-1.83-1.11-2.58-1.92s-1.32-1.74-1.71-2.76c-.39-1.02-.57-2.1-.54-3.18.03-1.08.27-2.13.72-3.12.45-.99.99-1.89 1.71-2.7.72-.81 1.59-1.47 2.58-1.92.99-.45 2.04-.72 3.12-.78 1.08-.06 2.16.09 3.18.45.87.315 1.68.81 2.43 1.44.75.63 1.38 1.41 1.83 2.28.45.87.75 1.83.87 2.82.12.99.09 2.01-.09 2.97-.18.96-.54 1.89-1.05 2.76zM11.82 9.472c-.838 0-1.35.51-1.35 1.156 0 .68.537 1.172 1.35 1.172.81 0 1.35-.492 1.35-1.172 0-.646-.54-1.156-1.35-1.156zm4.56-1.462c-.775 0-1.29.39-1.53.93l-.42-1.08h-1.26l1.53 3.84c-.38.28-.6.67-.6 1.14 0 .9.72 1.47 1.71 1.47.81 0 1.32-.42 1.32-1.02 0-.42-.24-.69-.66-.9l.54-1.35c.2-.5.33-.7.6-.7.21 0 .33.09.33.24 0 .2-.15.3-.33.39l-.42.15c-.24.09-.3.21-.3.39l-.93 2.34c.54.39.9.96.9 1.71 0 1.2-.93 1.95-2.28 1.95-1.26 0-2.16-.78-2.16-1.92 0-1.02.66-1.62 1.53-1.95l.93-2.31c.21-.52-1.02-2.82-2.16-2.82-.93 0-1.59.51-1.59 1.26 0 .66.51 1.08 1.23 1.08.75 0 1.23-.42 1.23-1.02 0-.3-.15-.45-.42-.45-.21 0-.39.09-.54.3l-.42-.99c.33-.48.96-.84 1.71-.84.21 0 .36.03.48.03.39-.93 1.29-1.59 2.43-1.59.81 0 1.35.42 1.35.96 0 .6-.48.87-1.14.87z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">JavaScript</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>HTML5</title><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.956-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">HTML</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>CSS3</title><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125-.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11H6.248l.33 4.17L12 19.35l5.379-1.442.744-8.158-12.54.002z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">CSS</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Spring</title><path d="M20.25 8.182c0-3.233-2.046-5.85-5.327-5.85-2.07 0-3.79 1.11-4.663 2.783C9.387 3.455 7.666 2.345 5.596 2.345c-3.28 0-5.326 2.618-5.326 5.837 0 2.903 2.3 5.48 5.174 5.48.243 0 .478-.018.712-.036-1.15 1.487-1.81 3.23-1.81 5.118 0 4.54 3.737 8.242 8.332 8.242s8.332-3.702 8.332-8.242c0-1.888-.66-3.63-1.81-5.118.234.018.47.036.713.036 2.875 0 5.175-2.577 5.175-5.48zm-14.654.01c0-2.31 1.54-4.18 3.515-4.18s3.514 1.87 3.514 4.18c0 2.308-1.539 4.18-3.514 4.18s-3.515-1.871-3.515-4.18zm9.337 0c0-2.31 1.539-4.18 3.514-4.18s3.515 1.87 3.515 4.18c0 2.308-1.54 4.18-3.515 4.18s-3.514-1.871-3.514-4.18zM12.01 22.35c-3.67 0-6.662-2.936-6.662-6.57s2.992-6.57 6.662-6.57c3.67 0 6.662 2.935 6.662 6.57s-2.992 6.57-6.662 6.57z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Spring Boot</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Astro</title><path d="m17.005 2.16-9.84 5.682a.41.41 0 0 0-.21.362v1.396c0 .17.108.326.273.39l4.58 1.79c.126.049.27.049.396 0l4.58-1.79a.428.428 0 0 0 .272-.39V8.204a.41.41 0 0 0-.21-.362l-9.84-5.682zM12 24l-4.52-2.713a.409.409 0 0 1-.21-.362V14.82a.41.41 0 0 1 .21-.362L12 8.775l4.52 5.683a.41.41 0 0 1 .21.362v6.105a.41.41 0 0 1-.21.362L12 24zm4.842-12.825L12 8.775l-4.842 2.4-4.58 1.79a.428.428 0 0 0-.272.39v1.396c0 .17.108.326.272.39l9.628 5.614a.426.426 0 0 0 .396 0l9.628-5.614a.428.428 0 0 0 .272-.39V15.15a.428.428 0 0 0-.272-.39L16.842 11.175z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Astro</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>FastAPI</title><path d="M12 0C5.373 0 0 5.373 0 12c0 3.225 1.255 6.15 3.33 8.277L2.09 23.32a.75.75 0 0 0 .94.94l3.044-1.24a11.933 11.933 0 0 0 5.926 1.98C18.627 24 24 18.627 24 12S18.627 0 12 0zm-1.125 4.5h2.25c.414 0 .75.336.75.75v1.5a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1-.75-.75V5.25c0-.414.336-.75.75-.75zM12 9c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6zm0 1.5c-2.485 0-4.5 2.015-4.5 4.5s2.015 4.5 4.5 4.5 4.5-2.015 4.5-4.5-2.015-4.5-4.5-4.5zm0 1.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 1.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">FastAPI</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>PostgreSQL</title><path d="M12.44 21.18c-3.69 0-5.5-1.74-5.5-4.83v-1.1L4.82 2.34h2.9l1.45 9.42h.12c.5-1.63 1.58-2.26 3.12-2.26 2.8 0 4.67 1.95 4.67 5.09s-1.87 5.09-4.68 5.09zm-.12-2.12c1.78 0 2.6-1.13 2.6-2.98s-.82-2.97-2.6-2.97c-1.2 0-2.1.8-2.52 2.1h-.12c-.08.6-.12 1.25-.12 1.88.03 1.45.8 1.97 2.76 1.97zm-1.8-14.54c-.66 0-1.1.47-1.1 1.07 0 .6.44 1.06 1.1 1.06s1.1-.46 1.1-1.06c0-.6-.44-1.07-1.1-1.07z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">PostgreSQL</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path d="M23.365 10.223c-1.082-1.082-2.4-1.74-3.793-1.905l-1.28-1.28c-.28-.28-.64-.44-1.02-.44H16.5c-.38 0-.74.16-1.02.44l-2.02 2.02c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l1.28-1.28c1.393-.165 2.71-1.028 3.793-2.11zM22.5 12c0 5.79-4.71 10.5-10.5 10.5S1.5 17.79 1.5 12 6.21 1.5 12 1.5c1.45 0 2.83.3 4.1.84l-2.06 2.06c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l2.06-2.06c.54 1.27.84 2.65.84 4.1zM18 12c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Git</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">GitHub</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Linux</title><path d="M0 13.342c0 .942.977 1.43 2.112 1.43.91 0 1.543-.37 1.543-1.07 0-.825-.85-1.29-2.31-1.74l-.993-.3c-1.125-.33-1.688-1.024-1.688-1.897 0-1.162.945-2.018 2.535-2.018 1.425 0 2.37.668 2.37 1.62h-1.38c0-.525-.563-.84-1.02-.84-.54 0-.9.255-.9.682 0 .57.69.96 2.25 1.433l.99.3c1.35.405 2.078 1.05 2.078 2.152 0 1.343-1.11 2.348-3.135 2.348-1.89 0-2.955-.848-2.955-2.04h1.38zm6.54 2.45c0 1.14-.908 1.92-2.31 1.92-1.4 0-2.29-.79-2.29-1.92V8.41h1.38v5.332c0 .54.495.915 1.006.915.51 0 .93-.375.93-.915V8.41h1.38v7.38zM12.518.21h-1.03l-1.9 4.2h-.05l-1.9-4.2h-1.03l2.42 5.33-2.6 5.86h1.03l2.08-4.66h.04l2.08 4.66h1.03l-2.6-5.86L12.518.21zM18.818 15.79h1.38V8.41h-1.38v7.38zm-.69-8.872c-.63 0-1.08-.45-1.08-1.035s.45-1.035 1.08-1.035c.63 0 1.08.45 1.08 1.035s-.45 1.035-1.08 1.035zM24 13.34h-1.38V8.6h-1.5v4.74H19.7V8.41h4.3v4.93z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Linux</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.28v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
+                            </div>
+                            <div class="tech-scroller-wrapper" aria-hidden="true">
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Java</title><path d="M11.75.25a.75.75 0 00-.75.75v3.23c-1.3.43-2.34 1.2-3.1 2.13-.77.93-1.28 2.02-1.55 3.2-.27 1.18-.3 2.37-.1 3.52.2 1.15.63 2.25 1.28 3.26.65 1.01 1.5 1.88 2.52 2.56s2.17 1.16 3.4 1.43v2.92a.75.75 0 001.5 0v-2.92c1.23-.27 2.38-.75 3.4-1.43s1.87-1.55 2.52-2.56a6.04 6.04 0 001.28-3.26c.2-1.15.17-2.34-.1-3.52a6.393 6.393 0 00-1.55-3.2c-.76-.93-1.8-1.7-3.1-2.13V1a.75.75 0 00-.75-.75h-1.5zm-1.8 14.54a4.464 4.464 0 01-.96-2.45c-.1-1.6.3-2.9.96-3.86.65-.95 1.6-1.53 2.76-1.7v8.06c-1.15-.17-2.1-.75-2.76-1.7v-2.28l.01 2.28zM14.05 3.9v8.07c1.16.17 2.1.75 2.76 1.7.66.95.96 2.25.96 3.86a4.52 4.52 0 01-1.04 2.45c.9-.41 1.7-.99 2.35-1.7.65-1.01 1.03-2.16 1.15-3.39.12-1.23.04-2.43-.3-3.59a4.872 4.872 0 00-1.2-2.48c-.6-.7-1.4-1.28-2.35-1.7l-.33.05zm.33 9.87v-2.28l.01 2.28z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Java</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Python</title><path d="M23.33.34a.33.33 0 00-.33.33v3.62c-1.5.5-2.69 1.38-3.56 2.46-.86 1.08-1.4 2.34-1.61 3.71-.22 1.37-.2 2.75.05 4.08.25 1.33.74 2.61 1.49 3.78.75 1.17 1.73 2.18 2.92 2.96 1.19.78 2.52 1.34 3.94 1.65v3.38a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33V.67a.33.33 0 00-.33-.33h-1.34zM12.33.34a.33.33 0 00-.33.33v6.33H8.33a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.67v1.33a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33V.67a.33.33 0 00-.33-.33h-1.34zm-2.09 14.5a5.174 5.174 0 01-1.11-2.84c-.12-1.85.35-3.36 1.11-4.47.76-1.1 1.85-1.77 3.2-2v9.34c-1.34-.2-2.43-.87-3.2-1.9v-2.64l.01 2.64zM.67 23.66a.33.33 0 00.33-.33v-3.62c1.5-.5 2.69-1.38 3.56-2.46.86-1.08 1.4-2.34 1.61-3.71.22-1.37.2-2.75-.05-4.08-.25-1.33-.74-2.61-1.49-3.78C5.43 4.43 4.45 3.42 3.26 2.64c-1.19-.78-2.52-1.34-3.94-1.65V.67A.33.33 0 00-.33.34H-1.67a.33.33 0 00-.33.33v22.66c0 .18.15.33.33.33H.67zm11.66 0a.33.33 0 00.33-.33V17a.33.33 0 00-.33-.33H8.67a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.33v1.33a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33v-1.33h-1v-1.34h1v1.34a.33.33 0 00.33.33h1.34a.33.33 0 00.33-.33v-1.33h.34a.33.33 0 00.33-.33v-1.34a.33.33 0 00-.33-.33h-.34v-1.33a.33.33 0 00-.33-.33h-1.34a.33.33 0 00-.33.33v1.33H8.67a.33.33 0 00-.33.33v1.34a.33.33 0 00.33.33h3.33v3.66a.33.33 0 00.33.33h1.34zM-9.24 9.46c-1.35.2-2.44.87-3.2 2-.76 1.1-.98 2.62-1.1 4.47a5.21 5.21 0 011.1 2.84c1.18.47 2.2.82 3.2 1.05V9.46z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Python</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>JavaScript</title><path d="M0 0h24v24H0V0zm22.034 18.262c.337-1.13.434-2.333.284-3.518-.15-1.186-.485-2.34-1.006-3.41-.52-1.07-1.22-2.04-2.09-2.88-.87-.84-1.905-1.52-3.09-2.01-1.185-.49-2.508-.78-3.84-.84-.537-.024-1.08-.01-1.62.053-.54.062-1.08.17-1.62.322-.54.153-1.05.35-1.53.585-.48.237-.93.51-1.35.81-.42.3-.81.63-1.17.99-.36.36-.69.75-.99 1.17-.3.42-.57.87-.81 1.35-.24.48-.43.99-.586 1.53-.153.54-.26 1.08-.323 1.62-.062.54-.076 1.083-.052 1.62.023 1.332.315 2.655.84 3.84.49 1.185 1.19 2.22 2.01 3.09.84.87 1.82 1.57 2.88 2.09 1.07.52 2.224.856 3.41 1.006 1.186.15 2.388.054 3.518-.284 1.13-.336 2.19-.88 3.12-1.62 1.02-.81 1.86-1.84 2.49-3.03.63-1.19.99-2.53 1.05-3.87.06-1.34-.15-2.68-.63-3.93zm-1.89 5.34c-.51.87-1.17 1.62-1.98 2.22-.81.6-1.74 1.05-2.76 1.32-1.02.27-2.07.36-3.12.27-1.05-.09-2.07-.39-3.03-.84-.96-.45-1.83-1.11-2.58-1.92s-1.32-1.74-1.71-2.76c-.39-1.02-.57-2.1-.54-3.18.03-1.08.27-2.13.72-3.12.45-.99.99-1.89 1.71-2.7.72-.81 1.59-1.47 2.58-1.92.99-.45 2.04-.72 3.12-.78 1.08-.06 2.16.09 3.18.45.87.315 1.68.81 2.43 1.44.75.63 1.38 1.41 1.83 2.28.45.87.75 1.83.87 2.82.12.99.09 2.01-.09 2.97-.18.96-.54 1.89-1.05 2.76zM11.82 9.472c-.838 0-1.35.51-1.35 1.156 0 .68.537 1.172 1.35 1.172.81 0 1.35-.492 1.35-1.172 0-.646-.54-1.156-1.35-1.156zm4.56-1.462c-.775 0-1.29.39-1.53.93l-.42-1.08h-1.26l1.53 3.84c-.38.28-.6.67-.6 1.14 0 .9.72 1.47 1.71 1.47.81 0 1.32-.42 1.32-1.02 0-.42-.24-.69-.66-.9l.54-1.35c.2-.5.33-.7.6-.7.21 0 .33.09.33.24 0 .2-.15.3-.33.39l-.42.15c-.24.09-.3.21-.3.39l-.93 2.34c.54.39.9.96.9 1.71 0 1.2-.93 1.95-2.28 1.95-1.26 0-2.16-.78-2.16-1.92 0-1.02.66-1.62 1.53-1.95l.93-2.31c.21-.52-1.02-2.82-2.16-2.82-.93 0-1.59.51-1.59 1.26 0 .66.51 1.08 1.23 1.08.75 0 1.23-.42 1.23-1.02 0-.3-.15-.45-.42-.45-.21 0-.39.09-.54.3l-.42-.99c.33-.48.96-.84 1.71-.84.21 0 .36.03.48.03.39-.93 1.29-1.59 2.43-1.59.81 0 1.35.42 1.35.96 0 .6-.48.87-1.14.87z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">JavaScript</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>HTML5</title><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.956-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">HTML</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>CSS3</title><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125-.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11H6.248l.33 4.17L12 19.35l5.379-1.442.744-8.158-12.54.002z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">CSS</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Spring</title><path d="M20.25 8.182c0-3.233-2.046-5.85-5.327-5.85-2.07 0-3.79 1.11-4.663 2.783C9.387 3.455 7.666 2.345 5.596 2.345c-3.28 0-5.326 2.618-5.326 5.837 0 2.903 2.3 5.48 5.174 5.48.243 0 .478-.018.712-.036-1.15 1.487-1.81 3.23-1.81 5.118 0 4.54 3.737 8.242 8.332 8.242s8.332-3.702 8.332-8.242c0-1.888-.66-3.63-1.81-5.118.234.018.47.036.713.036 2.875 0 5.175-2.577 5.175-5.48zm-14.654.01c0-2.31 1.54-4.18 3.515-4.18s3.514 1.87 3.514 4.18c0 2.308-1.539 4.18-3.514 4.18s-3.515-1.871-3.515-4.18zm9.337 0c0-2.31 1.539-4.18 3.514-4.18s3.515 1.87 3.515 4.18c0 2.308-1.54 4.18-3.515 4.18s-3.514-1.871-3.514-4.18zM12.01 22.35c-3.67 0-6.662-2.936-6.662-6.57s2.992-6.57 6.662-6.57c3.67 0 6.662 2.935 6.662 6.57s-2.992 6.57-6.662 6.57z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Spring Boot</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Astro</title><path d="m17.005 2.16-9.84 5.682a.41.41 0 0 0-.21.362v1.396c0 .17.108.326.273.39l4.58 1.79c.126.049.27.049.396 0l4.58-1.79a.428.428 0 0 0 .272-.39V8.204a.41.41 0 0 0-.21-.362l-9.84-5.682zM12 24l-4.52-2.713a.409.409 0 0 1-.21-.362V14.82a.41.41 0 0 1 .21-.362L12 8.775l4.52 5.683a.41.41 0 0 1 .21.362v6.105a.41.41 0 0 1-.21.362L12 24zm4.842-12.825L12 8.775l-4.842 2.4-4.58 1.79a.428.428 0 0 0-.272.39v1.396c0 .17.108.326.272.39l9.628 5.614a.426.426 0 0 0 .396 0l9.628-5.614a.428.428 0 0 0 .272-.39V15.15a.428.428 0 0 0-.272-.39L16.842 11.175z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Astro</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>FastAPI</title><path d="M12 0C5.373 0 0 5.373 0 12c0 3.225 1.255 6.15 3.33 8.277L2.09 23.32a.75.75 0 0 0 .94.94l3.044-1.24a11.933 11.933 0 0 0 5.926 1.98C18.627 24 24 18.627 24 12S18.627 0 12 0zm-1.125 4.5h2.25c.414 0 .75.336.75.75v1.5a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1-.75-.75V5.25c0-.414.336-.75.75-.75zM12 9c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6zm0 1.5c-2.485 0-4.5 2.015-4.5 4.5s2.015 4.5 4.5 4.5 4.5-2.015 4.5-4.5-2.015-4.5-4.5-4.5zm0 1.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 1.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">FastAPI</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>PostgreSQL</title><path d="M12.44 21.18c-3.69 0-5.5-1.74-5.5-4.83v-1.1L4.82 2.34h2.9l1.45 9.42h.12c.5-1.63 1.58-2.26 3.12-2.26 2.8 0 4.67 1.95 4.67 5.09s-1.87 5.09-4.68 5.09zm-.12-2.12c1.78 0 2.6-1.13 2.6-2.98s-.82-2.97-2.6-2.97c-1.2 0-2.1.8-2.52 2.1h-.12c-.08.6-.12 1.25-.12 1.88.03 1.45.8 1.97 2.76 1.97zm-1.8-14.54c-.66 0-1.1.47-1.1 1.07 0 .6.44 1.06 1.1 1.06s1.1-.46 1.1-1.06c0-.6-.44-1.07-1.1-1.07z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">PostgreSQL</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path d="M23.365 10.223c-1.082-1.082-2.4-1.74-3.793-1.905l-1.28-1.28c-.28-.28-.64-.44-1.02-.44H16.5c-.38 0-.74.16-1.02.44l-2.02 2.02c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l1.28-1.28c1.393-.165 2.71-1.028 3.793-2.11zM22.5 12c0 5.79-4.71 10.5-10.5 10.5S1.5 17.79 1.5 12 6.21 1.5 12 1.5c1.45 0 2.83.3 4.1.84l-2.06 2.06c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l2.06-2.06c.54 1.27.84 2.65.84 4.1zM18 12c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Git</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">GitHub</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Linux</title><path d="M0 13.342c0 .942.977 1.43 2.112 1.43.91 0 1.543-.37 1.543-1.07 0-.825-.85-1.29-2.31-1.74l-.993-.3c-1.125-.33-1.688-1.024-1.688-1.897 0-1.162.945-2.018 2.535-2.018 1.425 0 2.37.668 2.37 1.62h-1.38c0-.525-.563-.84-1.02-.84-.54 0-.9.255-.9.682 0 .57.69.96 2.25 1.433l.99.3c1.35.405 2.078 1.05 2.078 2.152 0 1.343-1.11 2.348-3.135 2.348-1.89 0-2.955-.848-2.955-2.04h1.38zm6.54 2.45c0 1.14-.908 1.92-2.31 1.92-1.4 0-2.29-.79-2.29-1.92V8.41h1.38v5.332c0 .54.495.915 1.006.915.51 0 .93-.375.93-.915V8.41h1.38v7.38zM12.518.21h-1.03l-1.9 4.2h-.05l-1.9-4.2h-1.03l2.42 5.33-2.6 5.86h1.03l2.08-4.66h.04l2.08 4.66h1.03l-2.6-5.86L12.518.21zM18.818 15.79h1.38V8.41h-1.38v7.38zm-.69-8.872c-.63 0-1.08-.45-1.08-1.035s.45-1.035 1.08-1.035c.63 0 1.08.45 1.08 1.035s-.45 1.035-1.08 1.035zM24 13.34h-1.38V8.6h-1.5v4.74H19.7V8.41h4.3v4.93z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Linux</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.28v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección Conceptos Backend -->
+                <section id="conceptos" class="py-24">
+                    <h2 class="section-title mb-12 justify-center reveal-section-title">
+                        <span class="font-mono text-[var(--accent-blue)] text-2xl mr-2">04.</span> Conceptos Backend
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         <div class="card concept-card reveal-concept p-6 text-center"><div class="icon-container h-20 flex items-center justify-center mb-4"><svg class="transition-transform ease-in-out duration-300 w-full h-full max-w-[120px] text-text-tertiary hover:scale-105 hover:text-[var(--accent-blue)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 32V20H32V32H20Z" stroke="currentColor" stroke-width="2"/><path d="M32 44V32H44V44H32Z" stroke="currentColor" stroke-width="2"/><path d="M32 20V8H44V20H32Z" stroke="currentColor" stroke-width="2"/><path d="M26 32L26 42" stroke="currentColor" stroke-width="2"/><path d="M38 32L38 20" stroke="currentColor" stroke-width="2"/><path d="M32 26H22" stroke="currentColor" stroke-width="2"/><path d="M42 38H32" stroke="currentColor" stroke-width="2"/></svg></div><h3 class="text-xl font-bold mb-2 text-text-primary">Microservicios</h3><p class="text-sm text-text-secondary">Diseño de sistemas como un conjunto de servicios pequeños y autónomos.</p></div>
+                        <div class="card concept-card reveal-concept p-6 text-center"><div class="icon-container h-20 flex items-center justify-center mb-4"><svg class="transition-transform ease-in-out duration-300 w-full h-full max-w-[120px] text-text-tertiary hover:scale-105 hover:text-[var(--accent-blue)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="16" rx="20" ry="8" stroke="currentColor" stroke-width="2"/><path d="M12 16V48C12 52.4183 20.9543 56 32 56C43.0457 56 52 52.4183 52 48V16" stroke="currentColor" stroke-width="2"/><path d="M52 32C52 36.4183 43.0457 40 32 40C20.9543 40 12 36.4183 12 32" stroke="currentColor" stroke-width="2"/><path d="M52 24C52 28.4183 43.0457 32 32 32C20.9543 32 12 28.4183 12 24" stroke="currentColor" stroke-width="2"/><path d="M52 40C52 44.4183 43.0457 48 32 48C20.9543 48 12 44.4183 12 40" stroke="currentColor" stroke-width="2"/></svg></div><h3 class="text-xl font-bold mb-2 text-text-primary">Bases de Datos</h3><p class="text-sm text-text-secondary">Modelado y estructuración de datos para garantizar consistencia y escalabilidad.</p></div>
+                        <div class="card concept-card reveal-concept p-6 text-center"><div class="icon-container h-20 flex items-center justify-center mb-4"><svg class="transition-transform ease-in-out duration-300 w-full h-full max-w-[120px] text-text-tertiary hover:scale-105 hover:text-[var(--accent-blue)]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="12" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/><rect x="36" y="40" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M28 18L32 18" stroke="currentColor" stroke-width="2"/><path d="M32 18C38.0751 18 43 22.9249 43 29C43 35.0751 38.0751 40 32 40" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 18L32 18" stroke="currentColor" stroke-width="2"/><path d="M40 25L43 29L40 33" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 46C14.9249 46 10 41.0751 10 35C10 28.9249 14.9249 24 21 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 39L10 35L13 31" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 class="text-xl font-bold mb-2 text-text-primary">API REST</h3><p class="text-sm text-text-secondary">Diseño de interfaces para comunicación eficiente entre cliente y servidor.</p></div>
+                    </div>
+                </section>
+
+                <!-- Sección Contacto -->
+                <section id="contacto" class="py-24 text-center max-w-xl mx-auto">
+                    <h2 class="font-mono text-[var(--accent-blue)] mb-4 reveal-contact">05. ¿Qué sigue?</h2>
+                    <h3 class="text-4xl md:text-5xl font-bold mb-4 reveal-contact">Ponte en Contacto</h3>
+                    <p class="text-text-secondary mb-8 reveal-contact">
+                        Estoy buscando activamente nuevas oportunidades. Si tienes un proyecto, una pregunta o simplemente quieres saludar, ¡mi bandeja de entrada está abierta!
+                    </p>
+                    <div class="reveal-contact">
+                        <a href="mailto:cawtoz.dev@gmail.com" class="font-mono text-lg border border-[var(--accent-blue)] text-[var(--accent-blue)] py-4 px-8 rounded-md hover:bg-[var(--accent-blue)]/10 transition-colors">
+                           ¡Di Hola!
+                        </a>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="text-center py-8">
+                <div class="flex justify-center gap-6 mb-4 md:hidden">
+                    <a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="github" class="w-6 h-6"></i></a>
+                    <a href="https://www.linkedin.com/in/carlos-andres-torres-contreras/" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)]"><i data-feather="linkedin" class="w-6 h-6"></i></a>
+                </div>
+                <p class="font-mono text-xs text-text-tertiary">
+                    Diseñado y construido por Carlos Torres.
+                </p>
+            </footer>
+            
+            <!-- Links Sociales Fijos -->
+            <div class="hidden md:flex flex-col items-center fixed bottom-0 left-10 z-10 after:content-[''] after:block after:w-px after:h-24 after:bg-text-tertiary">
+                <div class="flex flex-col gap-6 mb-6">
+                     <a href="https://github.com/cawtoz" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)] transition-transform hover:-translate-y-1"><i data-feather="github" class="w-6 h-6"></i></a>
+                    <a href="https://www.linkedin.com/in/carlos-andres-torres-contreras/" target="_blank" rel="noopener noreferrer" class="text-text-tertiary hover:text-[var(--accent-blue)] transition-transform hover:-translate-y-1"><i data-feather="linkedin" class="w-6 h-6"></i></a>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex flex-col items-center fixed bottom-0 right-10 z-10 after:content-[''] after:block after:w-px after:h-24 after:bg-text-tertiary">
+                <a href="mailto:cawtoz.dev@gmail.com" class="font-mono text-sm tracking-widest text-text-tertiary hover:text-[var(--accent-blue)] transition-colors" style="writing-mode: vertical-rl; margin-bottom: 1.5rem;">
+                    cawtoz.dev
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón Scroll to Top -->
+    <a href="#home" id="scroll-to-top" aria-label="Volver arriba">
+      <i data-feather="arrow-up" class="w-6 h-6"></i>
+    </a>
+    
+    <!-- Modal de Proyectos -->
+    <div id="project-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-button" class="modal-close-button" aria-label="Cerrar modal"><i data-feather="x" class="w-8 h-8"></i></button>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-3">
+                    <!-- [MODIFICADO] Contenedor del Carrousel del Modal -->
+                    <div id="modal-carousel" class="carousel-container bg-dark-bg rounded-md overflow-hidden">
+                        <!-- Slides se inyectan dinámicamente -->
+                        <div id="carousel-slides-container"></div>
+                        <!-- Controles -->
+                        <button id="carousel-prev" class="carousel-arrow prev"><i data-feather="chevron-left"></i></button>
+                        <button id="carousel-next" class="carousel-arrow next"><i data-feather="chevron-right"></i></button>
+                        <div id="carousel-dots" class="carousel-dots-container"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2">
+                    <h2 id="modal-project-title" class="text-3xl font-bold mb-2"></h2>
+                    <div id="modal-project-technologies" class="flex flex-wrap gap-2 mb-4"></div>
+                    <p id="modal-project-body" class="text-text-secondary text-sm leading-relaxed mb-6"></p>
+                    <div id="modal-project-links" class="flex justify-start gap-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            feather.replace();
+
+            // --- Canvas de fondo animado ---
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const numParticles = window.innerWidth < 768 ? 40 : 80;
+            const connectionDistance = 120;
+            const mouse = { x: null, y: null, radius: 150 };
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 0.8 - 0.4;
+                    this.speedY = Math.random() * 0.8 - 0.4;
+                    this.color = 'rgba(88, 166, 255, 0.8)';
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) { this.speedX *= -1; }
+                    if (this.y > canvas.height || this.y < 0) { this.speedY *= -1; }
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (mouse.x) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        if (Math.sqrt(dx * dx + dy * dy) < mouse.radius) {
+                           this.x -= dx * 0.02;
+                           this.y -= dy * 0.02;
+                        }
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            }
+
+            function animateBackground() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let p of particles) {
+                    p.update();
+                    p.draw();
+                }
+                drawConnections();
+                requestAnimationFrame(animateBackground);
+            }
+            function drawConnections() {
+                let lineColor = 'rgba(88, 166, 255, 0.15)';
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let dist = Math.sqrt(Math.pow(particles[a].x - particles[b].x, 2) + Math.pow(particles[a].y - particles[b].y, 2));
+                        if (dist < connectionDistance) {
+                            ctx.strokeStyle = lineColor;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            canvas.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+            canvas.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+            animateBackground();
+
+            // --- Efecto Typewriter ---
+            const typewriterElement = document.getElementById('typewriter');
+            const textToType = 'Construyo cosas para la web.';
+            let charIndex = 0;
+            function type() {
+                if (charIndex < textToType.length) {
+                    typewriterElement.textContent += textToType.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 80);
+                } else {
+                    typewriterElement.classList.remove('typewriter-cursor');
+                }
+            }
+            
+            // --- Lógica de la Navbar ---
+            const navbar = document.querySelector('.navbar');
+            const navbarMenu = document.getElementById('navbar-menu');
+            const navbarToggle = document.getElementById('navbar-toggle');
+            let lastScrollTop = 0;
+            navbarToggle.addEventListener('click', e => {
+                e.stopPropagation();
+                navbarMenu.classList.toggle('open');
+                navbarToggle.innerHTML = navbarMenu.classList.contains('open') ? '<i data-feather="x"></i>' : '<i data-feather="menu"></i>';
+                feather.replace();
+            });
+            window.addEventListener('scroll', () => {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                navbar.style.top = (scrollTop > lastScrollTop && scrollTop > navbar.offsetHeight) ? `-${navbar.offsetHeight}px` : '0';
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
+            
+            // --- Datos de Proyectos ---
+            const projectsData = {
+                'cine-api': {
+                    title: 'Cine API',
+                    longDescription: 'API RESTful robusta y escalable construida con Node.js y Express, utilizando MongoDB. Permite a los usuarios buscar, filtrar y obtener detalles sobre películas. Implementa autenticación JWT y utiliza un sistema de caché para mejorar el rendimiento.',
+                    technologies: ['Node.js', 'Express.js', 'MongoDB', 'JWT', 'Docker'],
+                    media: [
+                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Cine+API+Endpoint' },
+                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Estructura+Proyecto' }
+                    ],
+                    links: { github: 'https://github.com/cawtoz' }
+                },
+                'dire-docs': {
+                    title: 'Dire Docs',
+                    longDescription: 'Plataforma de documentación ligera y fácil de usar, inspirada en la navegación de sistemas de archivos. Construida con Astro y Tailwind CSS, ofrece una experiencia de usuario rápida gracias a la generación de sitios estáticos.',
+                    technologies: ['Astro', 'Tailwind CSS', 'Markdown', 'SSG'],
+                     media: [
+                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Dire+Docs+Home' },
+                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Navegación' }
+                    ],
+                    links: { github: 'https://github.com/cawtoz', demo: '#' }
+                }
+            };
+            
+            // --- Lógica del Modal y Carrousel ---
+            const modalOverlay = document.getElementById('project-modal-overlay');
+            const projectCards = document.querySelectorAll('.project-card, .featured-project-card');
+            let currentSlide = 0;
+            let projectMedia = [];
+
+            function showSlide(index) {
+                const slides = document.querySelectorAll('#carousel-slides-container .carousel-slide');
+                const dots = document.querySelectorAll('#carousel-dots .dot');
+                if (!slides.length || !dots.length) return;
+
+                currentSlide = (index + slides.length) % slides.length; // Asegura que el índice sea válido
+                
+                slides.forEach((slide, i) => slide.classList.toggle('active', i === currentSlide));
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+            }
+
+            function openModal(projectId) {
+                const project = projectsData[projectId];
+                if (!project) return;
+                
+                projectMedia = project.media;
+                document.getElementById('modal-project-title').textContent = project.title;
+                document.getElementById('modal-project-body').textContent = project.longDescription;
+                
+                const techContainer = document.getElementById('modal-project-technologies');
+                techContainer.innerHTML = project.technologies.map(tech => `<span class="bg-[var(--medium-bg)] text-[var(--accent-blue)] text-xs font-mono py-1 px-2 rounded-full">${tech}</span>`).join('');
+                
+                const linksContainer = document.getElementById('modal-project-links');
+                linksContainer.innerHTML = '';
+                if(project.links.github) linksContainer.innerHTML += `<a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm"><i data-feather="github" class="w-5 h-5"></i>Código</a>`;
+                if(project.links.demo) linksContainer.innerHTML += `<a href="${project.links.demo}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm"><i data-feather="external-link" class="w-5 h-5"></i>Demo</a>`;
+                
+                // [MODIFICADO] Inyectar slides y dots en sus contenedores
+                document.getElementById('carousel-slides-container').innerHTML = projectMedia.map(m => `<div class="carousel-slide aspect-video"><img src="${m.src}" class="w-full h-full object-cover"></div>`).join('');
+                document.getElementById('carousel-dots').innerHTML = projectMedia.map((_, i) => `<button class="dot" data-slide="${i}"></button>`).join('');
+
+                feather.replace();
+                showSlide(0);
+                modalOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            projectCards.forEach(card => card.addEventListener('click', () => openModal(card.dataset.projectId)));
+            document.getElementById('modal-close-button').addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+            
+            document.getElementById('carousel-next').addEventListener('click', () => showSlide(currentSlide + 1));
+            document.getElementById('carousel-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+            document.getElementById('carousel-dots').addEventListener('click', e => { if(e.target.matches('.dot')) showSlide(parseInt(e.target.dataset.slide)); });
+
+            // --- GSAP y ScrollTrigger para animaciones ---
+            gsap.registerPlugin(ScrollTrigger);
+            ScrollTrigger.create({ trigger: "#home", start: "top 80%", once: true, onEnter: () => setTimeout(type, 500) });
+            
+            gsap.from(".reveal-animation", { duration: 0.8, y: 50, opacity: 0, stagger: 0.2, ease: "power3.out", delay: 0.2 });
+
+            gsap.utils.toArray('.reveal-section-title, .reveal-project, .reveal-timeline, .card.concept-card, .reveal-contact').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
+                    y: 50, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.1
+                });
+            });
+
+            // --- Lógica para activar links de la navbar con scroll ---
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('#navbar-menu a.navbar-link');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if(pageYOffset >= sectionTop - 150){
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href').includes(current)){
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Botón de Scroll to Top ---
+            const scrollTopButton = document.getElementById('scroll-to-top');
+            if (scrollTopButton) {
+                ScrollTrigger.create({
+                  start: "top -300",
+                  end: 99999,
+                  onToggle: self => scrollTopButton.classList.toggle("show", self.isActive),
+                });
+            }
+        });
+    </script>
+</body>
+</html>
