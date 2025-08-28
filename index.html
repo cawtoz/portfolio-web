@@ -487,7 +487,10 @@
                                 <div class="flex flex-wrap gap-2">
                                     <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">FastAPI</span>
                                     <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">PostgreSQL</span>
-                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Vue</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Svelte</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Node</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Docker</span>
+                                    <span class="bg-blue-900/50 text-sky-300 text-xs font-mono py-1 px-3 rounded-full">Linux</span>
                                 </div>
                             </div>
                         </div>
@@ -507,7 +510,65 @@
                         <span class="font-mono text-[var(--accent-blue)] text-2xl mr-2">02.</span> Proyectos Destacados
                     </h2>
                     <div class="space-y-24">
+                        <!-- Proyecto destacado: Cineteca -->
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center reveal-project featured-project-card" data-project-id="cineteca">
+                            <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden">
+                                <img src="images/cineteca/cineteca-1.png" alt="Cineteca project preview" class="w-full h-full object-cover project-image">
+                            </div>
+                            <div class="md:col-span-5 text-left">
+                                <p class="font-mono text-sm" style="color: var(--accent-blue);">Proyecto Destacado</p>
+                                <h3 class="text-2xl font-bold mb-4">Cineteca</h3>
+                                <div class="card p-6 text-sm text-text-secondary shadow-lg">
+                                    <span class="block text-lg font-bold mb-2" style="color: var(--accent-blue);">Preservando la Memoria Fílmica de Santander</span>
+                                    Archivo histórico que rescata, preserva y difunde el patrimonio audiovisual de la región santandereana. La Fundación Cineteca Pública de Santander se dedica a la investigación, restauración y difusión del patrimonio fílmico regional. Cada película es un tesoro que cuenta una historia única de Santander. Explora nuestro catálogo digital y comienza tu viaje por el cine santandereano.
+                                </div>
+                                <div class="flex justify-start flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-[var(--accent-blue)]">
+                                    <span>Python</span>
+                                    <span>FastAPI</span>
+                                    <span>TypeScript</span>
+                                    <span>Tailwind</span>
+                                    <span>PostgreSQL</span>
+                                    <span>Svelte</span>
+                                    <span>Node</span>
+                                    <span>Docker</span>
+                                    <span>Linux</span>
+                                </div>
+                                <div class="flex gap-4 mt-6">
+                                    <a href="https://catalogo.fundacioncinetecapublica.com/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors duration-200">
+                                        <i data-feather="external-link" class="w-5 h-5"></i>Demo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     
+                        <!-- Proyecto destacado: Dine API -->
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center reveal-project featured-project-card" data-project-id="dine-api">
+                            <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden">
+                                <img src="https://github.com/user-attachments/assets/6204809b-62d9-4af3-a62f-9811c82ee227" alt="Dine API project preview" class="w-full h-full object-cover project-image">
+                            </div>
+                            <div class="md:col-span-5 text-left">
+                                <p class="font-mono text-sm" style="color: var(--accent-blue);">Proyecto Destacado</p>
+                                <h3 class="text-2xl font-bold mb-4">Dine API</h3>
+                                <div class="card p-6 text-sm text-text-secondary shadow-lg">
+                                    API RESTful robusta y escalable construida con Kotlin y Ktor, utilizando PostgreSQL. Permite a los usuarios buscar, filtrar y obtener detalles sobre restaurantes y menús.
+                                </div>
+                                <div class="flex justify-start flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-[var(--accent-blue)]">
+                                    <span>Kotlin</span>
+                                    <span>Ktor</span>
+                                    <span>PostgreSQL</span>
+                                    <span>Docker</span>
+                                </div>
+                                <div class="flex gap-4 mt-6">
+                                    <a href="https://cawtoz.github.io/dine-docs/start/introduction/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors duration-200">
+                                        <i data-feather="book" class="w-5 h-5"></i>Documentación
+                                    </a>
+                                    <a href="https://github.com/cawtoz/dine-api" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors duration-200">
+                                        <i data-feather="github" class="w-5 h-5"></i>Código
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center reveal-project featured-project-card" data-project-id="logiclab">
                             <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden">
                                 <img src="https://github.com/user-attachments/assets/aae55838-1c65-4bb6-91f4-f2d1fbbfa858" alt="LogicLAB project preview" class="w-full h-full object-cover project-image">
@@ -518,7 +579,7 @@
                                 <div class="card p-6 text-sm text-text-secondary text-left shadow-lg">
                                     Aplicación educativa desarrollada con Flutter y Firebase para enseñar lógica de programación. Incluye lecciones, ejercicios interactivos y retroalimentación, con autenticación segura y seguimiento del progreso.
                                 </div>
-                                <div class="flex justify-end flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-text-tertiary">
+                                <div class="flex justify-end flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-xs text-[var(--accent-blue)]">
                                     <span>Flutter</span><span>Dart</span><span>Firebase</span><span>Firebase Auth</span>
                                 </div>
                             </div>
@@ -529,18 +590,13 @@
                                 <p class="font-mono text-sm" style="color: var(--accent-blue);">Proyecto Destacado</p>
                                 <h3 class="text-2xl font-bold mb-4">AutoPark</h3>
                                 <div class="card p-6 text-sm text-text-secondary shadow-lg">Sistema de gestión de parqueaderos basado en Spring Boot. Incluye autenticación segura, cálculo automático de tarifas y notificaciones por correo.</div>
-                                <div class="flex justify-start flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-text-tertiary"><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Thymeleaf</span><span>Bootstrap</span></div>
+                                <div class="flex justify-start flex-wrap gap-x-4 gap-y-2 mt-4 font-mono text-xs text-xs text-[var(--accent-blue)]"><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>Thymeleaf</span><span>Bootstrap</span></div>
                             </div>
                             <div class="md:col-span-7 project-image-container rounded-lg overflow-hidden md:order-2"><img src="https://github.com/user-attachments/assets/d6e93feb-ff33-4edf-a633-ad1cfca1452a" alt="AutoPark project preview" class="w-full h-full object-cover project-image"></div>
                         </div>
 
                     </div>
-                    <!-- View All Projects Button -->
-                    <div class="text-center mt-20 reveal-project">
-                         <a href="projects/" class="font-mono text-lg border border-[var(--accent-blue)] text-[var(--accent-blue)] py-3 px-6 rounded-md hover:bg-[var(--accent-blue)]/10 transition-colors">
-                           Ver Archivo de Proyectos
-                        </a>
-                    </div>
+                    
                 </section>
 
                 <!-- Animated Tech Stack Section -->
@@ -563,7 +619,7 @@
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path d="M23.365 10.223c-1.082-1.082-2.4-1.74-3.793-1.905l-1.28-1.28c-.28-.28-.64-.44-1.02-.44H16.5c-.38 0-.74.16-1.02.44l-2.02 2.02c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l1.28-1.28c1.393-.165 2.71-1.028 3.793-2.11zM22.5 12c0 5.79-4.71 10.5-10.5 10.5S1.5 17.79 1.5 12 6.21 1.5 12 1.5c1.45 0 2.83.3 4.1.84l-2.06 2.06c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l2.06-2.06c.54 1.27.84 2.65.84 4.1zM18 12c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Git</p></div>
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">GitHub</p></div>
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Linux</title><path d="M0 13.342c0 .942.977 1.43 2.112 1.43.91 0 1.543-.37 1.543-1.07 0-.825-.85-1.29-2.31-1.74l-.993-.3c-1.125-.33-1.688-1.024-1.688-1.897 0-1.162.945-2.018 2.535-2.018 1.425 0 2.37.668 2.37 1.62h-1.38c0-.525-.563-.84-1.02-.84-.54 0-.9.255-.9.682 0 .57.69.96 2.25 1.433l.99.3c1.35.405 2.078 1.05 2.078 2.152 0 1.343-1.11 2.348-3.135 2.348-1.89 0-2.955-.848-2.955-2.04h1.38zm6.54 2.45c0 1.14-.908 1.92-2.31 1.92-1.4 0-2.29-.79-2.29-1.92V8.41h1.38v5.332c0 .54.495.915 1.006.915.51 0 .93-.375.93-.915V8.41h1.38v7.38zM12.518.21h-1.03l-1.9 4.2h-.05l-1.9-4.2h-1.03l2.42 5.33-2.6 5.86h1.03l2.08-4.66h.04l2.08 4.66h1.03l-2.6-5.86L12.518.21zM18.818 15.79h1.38V8.41h-1.38v7.38zm-.69-8.872c-.63 0-1.08-.45-1.08-1.035s.45-1.035 1.08-1.035c.63 0 1.08.45 1.08 1.035s-.45 1.035-1.08 1.035zM24 13.34h-1.38V8.6h-1.5v4.74H19.7V8.41h4.3v4.93z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Linux</p></div>
-                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.28v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
                             </div>
                             <div class="tech-scroller-wrapper" aria-hidden="true">
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Java</title><path d="M11.75.25a.75.75 0 00-.75.75v3.23c-1.3.43-2.34 1.2-3.1 2.13-.77.93-1.28 2.02-1.55 3.2-.27 1.18-.3 2.37-.1 3.52.2 1.15.63 2.25 1.28 3.26.65 1.01 1.5 1.88 2.52 2.56s2.17 1.16 3.4 1.43v2.92a.75.75 0 001.5 0v-2.92c1.23-.27 2.38-.75 3.4-1.43s1.87-1.55 2.52-2.56a6.04 6.04 0 001.28-3.26c.2-1.15.17-2.34-.1-3.52a6.393 6.393 0 00-1.55-3.2c-.76-.93-1.8-1.7-3.1-2.13V1a.75.75 0 00-.75-.75h-1.5zm-1.8 14.54a4.464 4.464 0 01-.96-2.45c-.1-1.6.3-2.9.96-3.86.65-.95 1.6-1.53 2.76-1.7v8.06c-1.15-.17-2.1-.75-2.76-1.7v-2.28l.01 2.28zM14.05 3.9v8.07c1.16.17 2.1.75 2.76 1.7.66.95.96 2.25.96 3.86a4.52 4.52 0 01-1.04 2.45c.9-.41 1.7-.99 2.35-1.7.65-1.01 1.03-2.16 1.15-3.39.12-1.23.04-2.43-.3-3.59a4.872 4.872 0 00-1.2-2.48c-.6-.7-1.4-1.28-2.35-1.7l-.33.05zm.33 9.87v-2.28l.01 2.28z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Java</p></div>
@@ -578,7 +634,7 @@
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path d="M23.365 10.223c-1.082-1.082-2.4-1.74-3.793-1.905l-1.28-1.28c-.28-.28-.64-.44-1.02-.44H16.5c-.38 0-.74.16-1.02.44l-2.02 2.02c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l1.28-1.28c1.393-.165 2.71-1.028 3.793-2.11zM22.5 12c0 5.79-4.71 10.5-10.5 10.5S1.5 17.79 1.5 12 6.21 1.5 12 1.5c1.45 0 2.83.3 4.1.84l-2.06 2.06c-.28.28-.44.64-.44 1.02v.75c0 .38.16.74.44 1.02l2.02 2.02c.28.28.64.44 1.02.44h.75c.38 0 .74-.16 1.02-.44l2.06-2.06c.54 1.27.84 2.65.84 4.1zM18 12c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Git</p></div>
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">GitHub</p></div>
                                 <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Linux</title><path d="M0 13.342c0 .942.977 1.43 2.112 1.43.91 0 1.543-.37 1.543-1.07 0-.825-.85-1.29-2.31-1.74l-.993-.3c-1.125-.33-1.688-1.024-1.688-1.897 0-1.162.945-2.018 2.535-2.018 1.425 0 2.37.668 2.37 1.62h-1.38c0-.525-.563-.84-1.02-.84-.54 0-.9.255-.9.682 0 .57.69.96 2.25 1.433l.99.3c1.35.405 2.078 1.05 2.078 2.152 0 1.343-1.11 2.348-3.135 2.348-1.89 0-2.955-.848-2.955-2.04h1.38zm6.54 2.45c0 1.14-.908 1.92-2.31 1.92-1.4 0-2.29-.79-2.29-1.92V8.41h1.38v5.332c0 .54.495.915 1.006.915.51 0 .93-.375.93-.915V8.41h1.38v7.38zM12.518.21h-1.03l-1.9 4.2h-.05l-1.9-4.2h-1.03l2.42 5.33-2.6 5.86h1.03l2.08-4.66h.04l2.08 4.66h1.03l-2.6-5.86L12.518.21zM18.818 15.79h1.38V8.41h-1.38v7.38zm-.69-8.872c-.63 0-1.08-.45-1.08-1.035s.45-1.035 1.08-1.035c.63 0 1.08.45 1.08 1.035s-.45 1.035-1.08 1.035zM24 13.34h-1.38V8.6h-1.5v4.74H19.7V8.41h4.3v4.93z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Linux</p></div>
-                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.28v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
+                                <div class="tech-icon-container"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path d="M22.992 13.332c-1.357.542-2.628 1.33-3.923 1.88-1.028.43-1.42.228-1.48-1.026v-1.94c.333-2.028-.1-3.056-1.573-4.085-1.086-.752-2.36-1.03-3.615-1.12-1.96-.143-3.7.134-5.464.764-1.636.57-2.73 1.44-3.805 2.253-1.69 1.28-2.317 2.898-2.84 4.88-.235.874-.35 1.766-.46 2.653-.14 1.25-.333 2.492-.41 3.743l-.004.056c0 .38.258.42.424.37l.01-.002c1.72-.513 3.44-.954 5.14-1.524.18-.06.29-.18.28-.32l-.018-.865c-.01-.588.04-1.178.11-1.764.127-1.05.47-2.08.99-3.02.73-1.31 1.83-2.43 3.19-3.23.86-.51 1.8-.78 2.76-.94 1.48-.25 2.92-.1 4.3.36 1.48.5 2.8 1.3 3.9 2.4.95.94 1.6 2.06 2.1 3.27.24.58.4 1.18.5 1.79.06.36.1.72.13 1.08.04.4.07.79.05 1.2v.03c.01.2-.12.3-.23.23zm-10.37-3.92c-.89.02-1.77.08-2.65.17-1.08.11-1.35-.1-1.35-1.21v-1.64c0-.98.24-1.17 1.2-1.25.9-.08 1.8-.13 2.7-.13.88 0 1.76.05 2.64.13.97.08 1.2.27 1.2 1.25v1.64c0 1.1-.27 1.32-1.35 1.21-.88-.09-1.76-.15-2.64-.17zm-1.34 3.03c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.62c0-.98.26-1.2 1.28-1.28.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.62c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm1.34 2.86c-.92.02-1.84.08-2.76.17-1.14.11-1.43-.1-1.43-1.27v-1.5c0-.97.26-1.19 1.28-1.27.9-.08 1.8-.13 2.7-.13s1.8.05 2.7.13c1.02.08 1.28.3 1.28 1.27v1.5c0 1.17-.29 1.38-1.43 1.27-.92-.09-1.84-.15-2.76-.17zm2.82-5.89c-.9 0-1.8.05-2.7.13-1.02.08-1.28.3-1.28 1.28v1.62c0 1.17.29 1.38 1.43 1.27.92-.09 1.84-.15 2.76-.17.92-.02 1.84-.08 2.76-.17 1.14-.11 1.43.1 1.43 1.27v-1.62c0-.98-.26-1.2-1.28-1.28-.9-.08-1.8-.13-2.7-.13z"/></svg><p class="font-mono text-sm text-text-tertiary mt-2">Docker</p></div>
                             </div>
                         </div>
                     </div>
@@ -793,25 +849,30 @@
             
             // --- Project Data ---
             const projectsData = {
-                'cine-api': {
-                    title: 'Cine API',
-                    longDescription: 'API RESTful robusta y escalable construida con Node.js y Express, utilizando MongoDB. Permite a los usuarios buscar, filtrar y obtener detalles sobre películas. Implementa autenticación JWT y utiliza un sistema de caché para mejorar el rendimiento.',
-                    technologies: ['Node.js', 'Express.js', 'MongoDB', 'JWT', 'Docker'],
+                'cineteca': {
+                    title: 'Cineteca',
+                    longDescription: 'Archivo histórico que rescata, preserva y difunde el patrimonio audiovisual de la región santandereana. La Fundación Cineteca Pública de Santander se dedica a la investigación, restauración y difusión del patrimonio fílmico regional. Cada película es un tesoro que cuenta una historia única de Santander. Explora nuestro catálogo digital y comienza tu viaje por el cine santandereano.',
+                    technologies: ['Python', 'FastAPI', 'TypeScript', 'Tailwind', 'PostgreSQL', 'Svelte', 'Node', 'Docker', 'Linux'],
                     media: [
-                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Cine+API+Endpoint' },
-                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Estructura+Proyecto' }
+                        { type: 'image', src: 'images/cineteca/cineteca-1.png' },
+                        { type: 'image', src: 'images/cineteca/cineteca-2.png' },
+                        { type: 'image', src: 'images/cineteca/cineteca-3.png' },
+                        { type: 'image', src: 'images/cineteca/cineteca-4.png' },
+                        { type: 'image', src: 'images/cineteca/cineteca-5.png' }
                     ],
-                    links: { github: 'https://github.com/cawtoz' }
+                    links: { demo: 'https://catalogo.fundacioncinetecapublica.com/' }
                 },
-                'dire-docs': {
-                    title: 'Dire Docs',
-                    longDescription: 'Plataforma de documentación ligera y fácil de usar, inspirada en la navegación de sistemas de archivos. Construida con Astro y Tailwind CSS, ofrece una experiencia de usuario rápida gracias a la generación de sitios estáticos.',
-                    technologies: ['Astro', 'Tailwind CSS', 'Markdown', 'SSG'],
-                     media: [
-                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Dire+Docs+Home' },
-                        { type: 'image', src: 'https://placehold.co/800x500/0d1117/58a6ff?text=Navegación' }
+                'dine-api': {
+                    title: 'Dine API',
+                    longDescription: 'API RESTful robusta y escalable construida con Kotlin y Ktor, utilizando PostgreSQL. Permite a los usuarios buscar, filtrar y obtener detalles sobre restaurantes y menús.',
+                    technologies: ['Kotlin', 'Ktor', 'PostgreSQL', 'Docker'],
+                    media: [
+                        { type: 'image', src: 'https://github.com/user-attachments/assets/6204809b-62d9-4af3-a62f-9811c82ee227' },
                     ],
-                    links: { github: 'https://github.com/cawtoz', demo: '#' }
+                    links: {
+                        github: 'https://github.com/cawtoz/dine-docs',
+                        docs: 'https://cawtoz.github.io/dine-docs/start/introduction/'
+                    }
                 },
                 'logiclab': {
                     title: 'LogicLAB',
